@@ -17,7 +17,7 @@ export default function EnrollmentsRoutes(app) {
 
   app.get("/api/enrollments/all", (req, res) => {
     try {
-      const courses = courseDao.getAllCourses();
+      const courses = courseDao.findAllCourses();
       res.send(courses);
     } catch (error) {
       console.error("Error fetching all courses:", error);
@@ -25,7 +25,7 @@ export default function EnrollmentsRoutes(app) {
     }
   });
 
-  app.get("/api/enrollments/:userId", (req, res) => {
+  app.get("/api/enrollments/:userId/courses", (req, res) => {
     const { userId } = req.params;
     const enrollments = enrollmentsDao.getEnrollmentsForUser(userId);
     res.send(enrollments);

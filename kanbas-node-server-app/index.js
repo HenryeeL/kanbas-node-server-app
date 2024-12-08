@@ -1,4 +1,5 @@
 import express from "express";
+import mongoose from "mongoose";
 import Hello from "./Hello.js";
 import Lab5 from "./Lab5/index.js";
 import cors from "cors";
@@ -10,6 +11,8 @@ import session from "express-session";
 import AssignmentRoutes from "./Kanbas/Assignments/router.js";
 import EnrollmentsRoutes from "./Kanbas/Enrollments/router.js";
 
+const CONNECTION_STRING = process.env.MONGO_CONNECTION_STRING || "mongodb://127.0.0.1:27017/kanbas"
+mongoose.connect(CONNECTION_STRING);
 const app = express();
 app.use(
   cors({
@@ -28,10 +31,18 @@ if (process.env.NODE_ENV !== "development") {
     sameSite: "none",
     secure: true,
     domain: process.env.NODE_SERVER_DOMAIN,
+  } 
+} else {
+  sessionOptions.cookie = {
+    sameSite: 'lax',
+    secure: false,
   };
 }
 app.use(session(sessionOptions));
 
+if (process.env.NODE_ENV !== "development") {
+  app.set("trust proxy", 1);
+}
    
 app.use(express.json());
 app.use(express.json());
