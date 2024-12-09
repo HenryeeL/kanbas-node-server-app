@@ -22,7 +22,14 @@ const app = express();
 app.use(
   cors({
     credentials: true,
-    origin: process.env.NETLIFY_URL || "http://localhost:3000",
+    origin: [
+      process.env.NETLIFY_URL || "http://localhost:3000",
+      "https://kanbas-react-web-app-2024.netlify.app",
+      /\.netlify\.app$/,
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    exposedHeaders: ["set-cookie"],
   })
 );
 const sessionOptions = {
@@ -43,14 +50,13 @@ if (process.env.NODE_ENV !== "development") {
     secure: false,
   };
 }
+app.use(express.json());
 app.use(session(sessionOptions));
 
 if (process.env.NODE_ENV !== "development") {
   app.set("trust proxy", 1);
 }
    
-app.use(express.json());
-app.use(express.json());
 Lab5(app);
 Hello(app);
 UserRoutes(app);
