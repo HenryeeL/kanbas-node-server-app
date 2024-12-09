@@ -11,8 +11,13 @@ import session from "express-session";
 import AssignmentRoutes from "./Kanbas/Assignments/router.js";
 import EnrollmentsRoutes from "./Kanbas/Enrollments/router.js";
 
-const CONNECTION_STRING = process.env.MONGO_CONNECTION_STRING || "mongodb://127.0.0.1:27017/kanbas"
-mongoose.connect(CONNECTION_STRING);
+const CONNECTION_STRING = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/kanbas"
+mongoose.connect(CONNECTION_STRING)
+  .then(() => console.log("成功连接到 MongoDB 数据库"))
+  .catch((err) => {
+    console.error("MongoDB 连接错误:", err);
+    process.exit(1);
+  });
 const app = express();
 app.use(
   cors({
